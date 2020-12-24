@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "267004380855",
+    "firebase_url": "https://library-management-syste-16099.firebaseio.com",
+    "project_id": "library-management-syste-16099",
+    "storage_bucket": "library-management-syste-16099.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267004380855:android:71e0fbcdde5c81d7b7ef32",
+        "android_client_info": {
+          "package_name": "com.example.demotwo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267004380855-ae0p8j2b0nh445s4vdphbvj2me7hqt80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDpW0vA0OyzeG4qqGwbQVYfIpQE8UTgLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267004380855-ae0p8j2b0nh445s4vdphbvj2me7hqt80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
