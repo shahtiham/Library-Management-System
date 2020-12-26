@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +37,7 @@ import java.util.HashMap;
 public class AdminUserReturnRequestBookFragment extends Fragment {
     private View adusrtrq;
     private RecyclerView adminuserrtrqrecView;
-    private String userid, rtbkid;
+    private String userid, rtbkid, nxtdate, thisdate;
     private String rqcpy, rqdate, rqduration, rqaut, rqbkname, rqcat, curavbk, rqisdate;
     private Long Lcuravbk, Lrq;
 
@@ -124,6 +126,7 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 rtbkid = getRef(position).getKey();
+
                                 showdialog();
                                 //Toast.makeText(getContext(), "rt clicked " + rtbkid, Toast.LENGTH_SHORT).show();
                             }
@@ -159,6 +162,8 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
 
         final TextView txtcpy, txtduration, txtissuedate, txtrtrqdate;
         final Button btnapp, btncan;
+        final CheckBox ck;
+        final EditText edtam;
 
         btnapp = (Button) mView.findViewById(R.id.btnadusrtrqapprove);
         btncan = (Button) mView.findViewById(R.id.btnadusrtrqcancel);
@@ -166,6 +171,8 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
         txtduration = (TextView) mView.findViewById(R.id.txtadusrtrqbkissueduration);
         txtissuedate = (TextView) mView.findViewById(R.id.txtadusrtrqbkissueddate);
         txtrtrqdate = (TextView) mView.findViewById(R.id.txtadusrtrqbkrtrqdate);
+        ck = (CheckBox) mView.findViewById(R.id.ckadusfinepaid);
+        edtam = (EditText) mView.findViewById(R.id.edtadusfinepaid);
 
         alert.setView(mView);
         final AlertDialog alertDialog = alert.create();
@@ -184,6 +191,41 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
                     rqduration = snapshot.child("issueduration").getValue().toString();
                     rqdate = snapshot.child("returnrequestdate").getValue().toString();
 
+                    // ** check fine..
+                    String crdate = rqisdate;
+                    String curDate = "", curMonth = "", curYear = "";
+                    for(int i = 0; i <= 1; i++) {
+                        if(i == 0 && crdate.charAt(i) == '0') continue;
+                        curDate = curDate + crdate.charAt(i);
+                    }
+                    for(int i = 3; i <= 5; i++) curMonth = curMonth + crdate.charAt(i);
+                    for(int i = 7; i <= 10; i++) curYear = curYear + crdate.charAt(i);
+                    int daysinmonth = getdaysincurmnth(curMonth,curYear);
+                    int dateafterdays = 0;
+                    if(rqduration.equals("1 Week")) dateafterdays = 7;
+                    else if(rqduration.equals("2 Weeks")) dateafterdays = 14;
+                    else if(rqduration.equals("3 Weeks")) dateafterdays = 21;
+                    else dateafterdays = 0;
+                    nxtdate = getnextday(dateafterdays,daysinmonth,curDate,curMonth,curYear);
+
+                    // **
+                    String todaydate = rqdate;
+                    String toDate = "", toMonth = "", toYear = "";
+                    for(int i = 0; i <= 1; i++) {
+                        if(i == 0 && todaydate.charAt(i) == '0') continue;
+                        toDate = toDate + todaydate.charAt(i);
+                    }
+                    for(int i = 3; i <= 5; i++) toMonth = toMonth + todaydate.charAt(i);
+                    for(int i = 7; i <= 10; i++) toYear = toYear + todaydate.charAt(i);
+                    String crmonthnum = getthismonth(toMonth);
+                    thisdate = toYear + crmonthnum + toDate;
+                    Long n1 = Long.valueOf(nxtdate);
+                    Long n2 = Long.valueOf(thisdate);
+                    if(n2 > n1){
+                        ck.setClickable(true);
+                        edtam.setVisibility(View.VISIBLE);
+                    }
+
                     txtcpy.setText(rqcpy + " copies issued");
                     txtduration.setText("Issued for " + rqduration);
                     txtissuedate.setText("Issued on " + rqisdate);
@@ -201,8 +243,48 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
         btnapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rtbk(rqaut,rqbkname,rqcat,rqisdate,rqcpy,rqduration,rqdate);
-                alertDialog.dismiss();
+                if(ck.isClickable()){
+                    if(!ck.isChecked()){
+                        Toast.makeText(getContext(), "Please check if fine paid and mark the checkbox", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(edtam.getText().toString().equals("")){
+                        Toast.makeText(getContext(), "Please enter the amount of fine received", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String Scpy;
+                    Scpy = edtam.getText().toString();
+                    boolean f = true;
+                    char ch = '#';
+                    for(int i = 0; i < Scpy.length(); i++){
+                        if(!Character.isDigit(Scpy.charAt(i))){
+                            f = false;
+                            break;
+                        }
+                        if(Scpy.charAt(i) >= '0' && Scpy.charAt(i) <= '9' && ch == '#'){
+                            ch = Scpy.charAt(i);
+                        }
+                    }
+                    if(ch == '#'){
+                        Toast.makeText(getContext(), "Please enter valid amount", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(ch == '0'){
+                        Toast.makeText(getContext(), "Please enter valid amount", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(f == false){
+                        Toast.makeText(getContext(), "Please enter valid amount", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    rtbkwithfine(rqaut,rqbkname,rqcat,rqisdate,rqcpy,rqduration,rqdate,Scpy);
+                    alertDialog.dismiss();
+                }
+                else{
+                    rtbk(rqaut,rqbkname,rqcat,rqisdate,rqcpy,rqduration,rqdate);
+                    alertDialog.dismiss();
+                }
             }
         });
 
@@ -216,6 +298,35 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
 
         alertDialog.show();
     }
+    private void rtbkwithfine(String authorname,String bookname,String cat,String issuedate, String issuedcopies,String issuedduration, String rtdate, String fine){
+        String nwkey = rtbkref.push().getKey();
+
+        HashMap<String,String> mp = new HashMap<>();
+        mp.put("authorname",authorname);
+        mp.put("bookname",bookname);
+        mp.put("bookid",rtbkid);
+        mp.put("catagory",cat);
+        mp.put("issuedate",issuedate);
+        mp.put("issuedcopies",issuedcopies);
+        mp.put("issueduration",issuedduration);
+        mp.put("returndate",rtdate);
+        mp.put("fine",fine);
+
+        rtbkref.child(nwkey).setValue(mp).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getContext(), "Request approved", Toast.LENGTH_SHORT).show();
+                    DatabaseReference dt = rtrqbkref.child(rtbkid);
+                    dt.removeValue();
+                    DatabaseReference isdt = issuedbkref.child(rtbkid);
+                    isdt.removeValue();
+                    getbooks();
+                }
+            }
+        });
+    }
+
     private void rtbk(String authorname,String bookname,String cat,String issuedate, String issuedcopies,String issuedduration, String rtdate) {
         String nwkey = rtbkref.push().getKey();
 
@@ -242,5 +353,72 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
                 }
             }
         });
+    }
+    // additional functions for checkin fine..
+    private int getdaysincurmnth(String curMonth,String curyear) {
+        if(!curMonth.equals("Feb")){
+            if(curMonth.equals("Jan") || curMonth.equals("Mar") || curMonth.equals("May") || curMonth.equals("Jul") || curMonth.equals("Aug") || curMonth.equals("Oct") || curMonth.equals("Dec")){
+                return 31;
+            } else{
+                return 30;
+            }
+        } else{
+            int yr;
+            yr = Integer.parseInt(curyear);
+            if(((yr % 4 == 0) && (yr % 100 != 0)) || (yr % 400 == 0)) return 29;
+            else return 28;
+        }
+    }
+    private String getnextday(int dateafterdays, int daysinmonth, String curDate, String curMonth, String curYear) {
+        int date = Integer.parseInt(curDate);
+        int yr = Integer.parseInt(curYear);
+        int nxtdate ;
+        String nxtmnth, nxtyr;
+        if(date + dateafterdays > daysinmonth) {
+            nxtdate = (date + dateafterdays) % daysinmonth;
+            nxtmnth = getnextmonth(curMonth);
+            if(nxtmnth.equals("Jan")){
+                nxtyr = Integer.toString(1 + yr);
+            } else {
+                nxtyr = curYear;
+            }
+            if(nxtdate < 10) return nxtyr + nxtmnth + "0" + Integer.toString(nxtdate);
+            return nxtyr + nxtmnth + Integer.toString(nxtdate);
+        }
+        else {
+            nxtdate = date + dateafterdays;
+            if(nxtdate < 10) return curYear + getthismonth(curMonth) + "0" + Integer.toString(nxtdate);
+            return curYear + getthismonth(curMonth) + Integer.toString(nxtdate);
+        }
+    }
+    private String getnextmonth(String curMonth) {
+        if(curMonth.equals("Jan")) return "02";
+        if(curMonth.equals("Feb")) return "03";
+        if(curMonth.equals("Mar")) return "04";
+        if(curMonth.equals("Apr")) return "05";
+        if(curMonth.equals("May")) return "06";
+        if(curMonth.equals("Jun")) return "07";
+        if(curMonth.equals("Jul")) return "08";
+        if(curMonth.equals("Aug")) return "09";
+        if(curMonth.equals("Sep")) return "10";
+        if(curMonth.equals("Oct")) return "11";
+        if(curMonth.equals("Nov")) return "12";
+        if(curMonth.equals("Dec")) return "01";
+        return "";
+    }
+    private String getthismonth(String toMonth) {
+        if(toMonth.equals("Jan")) return "01";
+        else if(toMonth.equals("Feb")) return "02";
+        else if(toMonth.equals("Mar")) return "03";
+        else if(toMonth.equals("Apr")) return "04";
+        else if(toMonth.equals("May")) return "05";
+        else if(toMonth.equals("Jun")) return "06";
+        else if(toMonth.equals("Jul")) return "07";
+        else if(toMonth.equals("Aug")) return "08";
+        else if(toMonth.equals("Sep")) return "09";
+        else if(toMonth.equals("Oct")) return "10";
+        else if(toMonth.equals("Nov")) return "11";
+        else if(toMonth.equals("Dec")) return "12";
+        else return "00";
     }
 }

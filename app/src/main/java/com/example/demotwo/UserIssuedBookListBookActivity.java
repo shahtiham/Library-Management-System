@@ -70,6 +70,36 @@ public class UserIssuedBookListBookActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM YYYY");
         String formattedDate = simpleDateFormat.format(calendar.getTime());
 
+        // ** check fine..
+        String crdate = issuedon;
+        String curDate = "", curMonth = "", curYear = "";
+        for(int i = 0; i <= 1; i++) {
+            if(i == 0 && crdate.charAt(i) == '0') continue;
+            curDate = curDate + crdate.charAt(i);
+        }
+        for(int i = 3; i <= 5; i++) curMonth = curMonth + crdate.charAt(i);
+        for(int i = 7; i <= 10; i++) curYear = curYear + crdate.charAt(i);
+        int daysinmonth = getdaysincurmnth(curMonth,curYear);
+        int dateafterdays = 0;
+        if(issuedduration.equals("1 Week")) dateafterdays = 7;
+        else if(issuedduration.equals("2 Weeks")) dateafterdays = 14;
+        else if(issuedduration.equals("3 Weeks")) dateafterdays = 21;
+        else dateafterdays = 0;
+        String nxtdate = getnextday(dateafterdays,daysinmonth,curDate,curMonth,curYear);
+
+        // **
+        String todaydate = formattedDate;
+        String toDate = "", toMonth = "", toYear = "";
+        for(int i = 0; i <= 1; i++) {
+            if(i == 0 && todaydate.charAt(i) == '0') continue;
+            toDate = toDate + todaydate.charAt(i);
+        }
+        for(int i = 3; i <= 5; i++) toMonth = toMonth + todaydate.charAt(i);
+        for(int i = 7; i <= 10; i++) toYear = toYear + todaydate.charAt(i);
+        String crmonthnum = getthismonth(toMonth);
+        String thisdate = toYear + crmonthnum + toDate;
+
+
         HashMap<String, String> mpa = new HashMap<>();
         mpa.put("authorname",authorname);
         mpa.put("bookname",bookname);
@@ -94,7 +124,14 @@ public class UserIssuedBookListBookActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(UserIssuedBookListBookActivity.this, "The book is requested for return", Toast.LENGTH_SHORT).show();
+                                        Long n1 = Long.valueOf(thisdate);
+                                        Long n2 = Long.valueOf(nxtdate);
+                                        if(n1 <= n2){
+                                            Toast.makeText(UserIssuedBookListBookActivity.this, "The book is requested for return", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(UserIssuedBookListBookActivity.this, "Please pay fine to return the book", Toast.LENGTH_SHORT).show();
+                                        }
                                         onBackPressed();
                                     }
                                     else{
@@ -111,6 +148,73 @@ public class UserIssuedBookListBookActivity extends AppCompatActivity {
                 Toast.makeText(UserIssuedBookListBookActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    // additional functions for checkin fine..
+    private int getdaysincurmnth(String curMonth,String curyear) {
+        if(!curMonth.equals("Feb")){
+            if(curMonth.equals("Jan") || curMonth.equals("Mar") || curMonth.equals("May") || curMonth.equals("Jul") || curMonth.equals("Aug") || curMonth.equals("Oct") || curMonth.equals("Dec")){
+                return 31;
+            } else{
+                return 30;
+            }
+        } else{
+            int yr;
+            yr = Integer.parseInt(curyear);
+            if(((yr % 4 == 0) && (yr % 100 != 0)) || (yr % 400 == 0)) return 29;
+            else return 28;
+        }
+    }
+    private String getnextday(int dateafterdays, int daysinmonth, String curDate, String curMonth, String curYear) {
+        int date = Integer.parseInt(curDate);
+        int yr = Integer.parseInt(curYear);
+        int nxtdate ;
+        String nxtmnth, nxtyr;
+        if(date + dateafterdays > daysinmonth) {
+            nxtdate = (date + dateafterdays) % daysinmonth;
+            nxtmnth = getnextmonth(curMonth);
+            if(nxtmnth.equals("Jan")){
+                nxtyr = Integer.toString(1 + yr);
+            } else {
+                nxtyr = curYear;
+            }
+            if(nxtdate < 10) return nxtyr + nxtmnth + "0" + Integer.toString(nxtdate);
+            return nxtyr + nxtmnth + Integer.toString(nxtdate);
+        }
+        else {
+            nxtdate = date + dateafterdays;
+            if(nxtdate < 10) return curYear + getthismonth(curMonth) + "0" + Integer.toString(nxtdate);
+            return curYear + getthismonth(curMonth) + Integer.toString(nxtdate);
+        }
+    }
+    private String getnextmonth(String curMonth) {
+        if(curMonth.equals("Jan")) return "02";
+        if(curMonth.equals("Feb")) return "03";
+        if(curMonth.equals("Mar")) return "04";
+        if(curMonth.equals("Apr")) return "05";
+        if(curMonth.equals("May")) return "06";
+        if(curMonth.equals("Jun")) return "07";
+        if(curMonth.equals("Jul")) return "08";
+        if(curMonth.equals("Aug")) return "09";
+        if(curMonth.equals("Sep")) return "10";
+        if(curMonth.equals("Oct")) return "11";
+        if(curMonth.equals("Nov")) return "12";
+        if(curMonth.equals("Dec")) return "01";
+        return "";
+    }
+    private String getthismonth(String toMonth) {
+        if(toMonth.equals("Jan")) return "01";
+        else if(toMonth.equals("Feb")) return "02";
+        else if(toMonth.equals("Mar")) return "03";
+        else if(toMonth.equals("Apr")) return "04";
+        else if(toMonth.equals("May")) return "05";
+        else if(toMonth.equals("Jun")) return "06";
+        else if(toMonth.equals("Jul")) return "07";
+        else if(toMonth.equals("Aug")) return "08";
+        else if(toMonth.equals("Sep")) return "09";
+        else if(toMonth.equals("Oct")) return "10";
+        else if(toMonth.equals("Nov")) return "11";
+        else if(toMonth.equals("Dec")) return "12";
+        else return "00";
     }
 
     @Override

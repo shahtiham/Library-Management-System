@@ -173,11 +173,12 @@ public class UserReturnedBookListFragment extends Fragment {
         final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         View mView = getLayoutInflater().inflate(R.layout.activity_user_returned_book_list_dialog,null);
 
-        final TextView txtcpy, txtduration, txtissuedate, txtreturndate;
+        final TextView txtcpy, txtduration, txtissuedate, txtreturndate, adfine;
         txtcpy = (TextView) mView.findViewById(R.id.txtuserretbklistissuedcopies);
         txtduration = (TextView) mView.findViewById(R.id.txtuserretbklistissuedduration);
         txtissuedate = (TextView) mView.findViewById(R.id.txtuserretbklistissuedate);
         txtreturndate = (TextView) mView.findViewById(R.id.txtuserretbklistreturndate);
+        adfine = (TextView) mView.findViewById(R.id.txtuserretbklistfinepaid);
 
         alert.setView(mView);
         final AlertDialog alertDialog = alert.create();
@@ -192,6 +193,11 @@ public class UserReturnedBookListFragment extends Fragment {
                     txtduration.setText("Issued for "+snapshot.child("issueduration").getValue().toString());
                     txtissuedate.setText("Issued on "+snapshot.child("issuedate").getValue().toString());
                     txtreturndate.setText("Returned on "+snapshot.child("returndate").getValue().toString());
+                    if(snapshot.hasChild("fine")){
+                        adfine.setText("Fine paid    " + snapshot.child("fine").getValue().toString() + " Tk");
+                    } else {
+                        adfine.setText("Fine paid    " + "0" + " Tk");
+                    }
                 }
             }
 
