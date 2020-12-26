@@ -172,7 +172,7 @@ public class UserIssuedBookListBookActivity extends AppCompatActivity {
         if(date + dateafterdays > daysinmonth) {
             nxtdate = (date + dateafterdays) % daysinmonth;
             nxtmnth = getnextmonth(curMonth);
-            if(nxtmnth.equals("Jan")){
+            if(nxtmnth.equals("01")){
                 nxtyr = Integer.toString(1 + yr);
             } else {
                 nxtyr = curYear;
