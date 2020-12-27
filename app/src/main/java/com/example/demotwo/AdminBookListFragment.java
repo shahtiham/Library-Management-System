@@ -192,6 +192,7 @@ public class AdminBookListFragment extends Fragment {
                     Toast.makeText(getContext(), "The book already exists", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
+                    Toast.makeText(getContext(), "New book added", Toast.LENGTH_SHORT).show();
                     HashMap<String,String> mp = new HashMap<>();
                     mp.put("bookname",sbk);
                     mp.put("authorname",sauthr);
