@@ -110,7 +110,7 @@ public class UserSignupActivity extends AppCompatActivity {
         }
 
         // Checking if username already exists or not.
-        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Users");
+        DatabaseReference ref= FirebaseDatabase.getInstance().getReference().child("Usernamearch");
         ref.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -132,7 +132,7 @@ public class UserSignupActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         String userUid = mAuth.getCurrentUser().getUid();
                                         //rootRef.child("Users").child(userUid).setValue("");
-                                        //putuserinfo(email,password,username);
+                                        //putuserinfo(email,username);
 
                                         //sendusertousermainhomeactivity();
                                         //Toast.makeText(UserSignupActivity.this, "Welcome to RUET library !", Toast.LENGTH_SHORT).show();
@@ -144,7 +144,7 @@ public class UserSignupActivity extends AppCompatActivity {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if(task.isSuccessful()){
                                                             rootRef.child("Registered").child(userUid).setValue("");
-                                                            putuserinfotoregister(email, password, username, userUid);
+                                                            putuserinfotoregister(email, username, userUid);
                                                         } else{
                                                             Toast.makeText(UserSignupActivity.this, "Error : " + task.getException().toString(), Toast.LENGTH_SHORT).show();
                                                         }
@@ -169,13 +169,17 @@ public class UserSignupActivity extends AppCompatActivity {
         return;
     }
 
-    private void putuserinfotoregister(String email, String password, String username, String userUid) {
+    private void putuserinfotoregister(String email, String username, String userUid) {
         HashMap<String, String> UprofileMap = new HashMap<>();
         UprofileMap.put("uid", userUid);
         UprofileMap.put("username", username);
         UprofileMap.put("email", email);
-        UprofileMap.put("password", password);
         UprofileMap.put("isadmin","false");
+
+        DatabaseReference Adt = FirebaseDatabase.getInstance().getReference().child("Usernamearch");
+        HashMap<String,String> nhs = new HashMap<>();
+        nhs.put("Username",username);
+        Adt.child(userUid).setValue(nhs);
         
         rootRef.child("Registered").child(userUid).setValue(UprofileMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -192,13 +196,12 @@ public class UserSignupActivity extends AppCompatActivity {
                 });
     }
 
-    private void putuserinfo(String email, String password, String username) {
+    private void putuserinfo(String email, String username) {
         String userUid = mAuth.getCurrentUser().getUid();
         HashMap<String, String> profileMap = new HashMap<>();
             profileMap.put("uid", userUid);
             profileMap.put("username", username);
             profileMap.put("email", email);
-            profileMap.put("password", password);
         rootRef.child("Users").child(userUid).setValue(profileMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

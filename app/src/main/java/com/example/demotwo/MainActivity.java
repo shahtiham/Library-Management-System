@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         String dtError = error.getMessage().toString();
-                        Toast.makeText(MainActivity.this, "ErroR : " + dtError, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

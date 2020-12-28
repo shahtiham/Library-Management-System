@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 public class UserLoginActivity extends AppCompatActivity {
-    private TextView txtGotosignup;
+    private TextView txtGotosignup, txtforgot;
     private Button btnLogin,btnadminlogin;
     private ProgressDialog loadingbar;
     private Toolbar toolbar;
@@ -64,6 +64,14 @@ public class UserLoginActivity extends AppCompatActivity {
             }
         });
 
+        // Forgot password.
+        txtforgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendpassrecovery();
+            }
+        });
+
         // User Login.
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +80,33 @@ public class UserLoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void sendpassrecovery() {
+        String email;
+        email = edttxtEmail.getText().toString();
+
+        if(email.equals("")){
+            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            Toast.makeText(this, "Please enter an valid email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(UserLoginActivity.this, "Please check your email to reset password", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(UserLoginActivity.this, "Error : " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void sendusertoadminhomeactivity() {
@@ -143,10 +178,9 @@ public class UserLoginActivity extends AppCompatActivity {
                                                         }
                                                         else{
                                                             String email = snapshot.child("email").getValue().toString();
-                                                            String password = snapshot.child("password").getValue().toString();
                                                             String username = snapshot.child("username").getValue().toString();
                                                             rootRef.child("Users").child(crid).setValue("");
-                                                            putuserinfo(email,password,username,crid);
+                                                            putuserinfo(email,username,crid);
                                                         }
                                                     }
 
@@ -189,14 +223,14 @@ public class UserLoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void putuserinfo(String email, String password, String username, String crid) {
+    private void putuserinfo(String email, String username, String crid) {
         DatabaseReference dt = FirebaseDatabase.getInstance().getReference().child("Registered").child(crid);
         HashMap<String, String> profileMap = new HashMap<>();
         profileMap.put("uid", crid);
         profileMap.put("username", username);
         profileMap.put("email", email);
-        profileMap.put("password", password);
         profileMap.put("isadmin","false");
+
         rootRef.child("Users").child(crid).setValue(profileMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -219,6 +253,7 @@ public class UserLoginActivity extends AppCompatActivity {
         edttxtPassword = findViewById(R.id.edttxtLoginpassword);
         btnLogin = findViewById(R.id.btnLogin);
         txtGotosignup = findViewById(R.id.txtGotosignup);
+        txtforgot = findViewById(R.id.txtforgotpass);
         loadingbar = new ProgressDialog(this);
     }
 

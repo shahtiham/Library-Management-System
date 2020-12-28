@@ -39,7 +39,7 @@
         android:id="@+id/txtGotosignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="65dp"
         android:text="Need an account ? Sign up!"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -88,6 +88,19 @@
             android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/txtforgotpass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Forgot password?"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
