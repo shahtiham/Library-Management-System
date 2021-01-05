@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -103,7 +104,7 @@ public class UserMainHomeActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         return true;
                     case R.id.btnSignout:
-                        Toast.makeText(UserMainHomeActivity.this, "Sign out", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserMainHomeActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
                         mAuth.signOut();
                         sendusertomainactivity();
                         return true;
