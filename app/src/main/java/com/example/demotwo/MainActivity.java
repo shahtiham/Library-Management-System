@@ -128,61 +128,30 @@ public class MainActivity extends AppCompatActivity {
 
             // ** Here begins verification.
             String crid = mAuth.getCurrentUser().getUid();
-            if(currentUser.isEmailVerified()){
-                regref.child(crid).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            if(snapshot.child("isadmin").getValue().toString().equals("true")){
-                                sendusertoadminhomeactivity();
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(MainActivity.this,UserLoginActivity.class));
-                                finish();
-                            }
-                        }
-                        else {
-                            sendusertousermainhomeactivity();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        String dtError = error.getMessage().toString();
-                        Toast.makeText(MainActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-            else {
-                regref.child(crid).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            if(snapshot.child("isadmin").getValue().toString().equals("true")){
-                                sendusertoadminhomeactivity();
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this, "Please login", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(MainActivity.this,UserLoginActivity.class));
-                                finish();
-                            }
+            regref.child(crid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        if(snapshot.child("isadmin").getValue().toString().equals("true")){
+                            sendusertoadminhomeactivity();
                         }
                         else{
-                            Toast.makeText(MainActivity.this, "Please verify your email to login", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(MainActivity.this,UserLoginActivity.class));
                             finish();
                         }
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        String dtError = error.getMessage().toString();
-                        Toast.makeText(MainActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
+                    else {
+                        sendusertousermainhomeactivity();
                     }
-                });
+                }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    String dtError = error.getMessage().toString();
+                    Toast.makeText(MainActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

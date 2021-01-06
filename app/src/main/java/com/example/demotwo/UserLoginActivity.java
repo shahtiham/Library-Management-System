@@ -191,6 +191,7 @@ public class UserLoginActivity extends AppCompatActivity {
                                                 });
                                             }
                                             else{
+                                                mAuth.signOut();
                                                 Toast.makeText(UserLoginActivity.this, "Please verify your email to login", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -199,6 +200,7 @@ public class UserLoginActivity extends AppCompatActivity {
                                         if(mAuth.getCurrentUser().isEmailVerified()){
                                             sendusertousermainhomeactivity();
                                         } else {
+                                            mAuth.signOut();
                                             Toast.makeText(UserLoginActivity.this, "Please verify your email to login", Toast.LENGTH_SHORT).show();
                                         }
                                     }

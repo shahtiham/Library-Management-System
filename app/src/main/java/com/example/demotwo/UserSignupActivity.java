@@ -189,6 +189,7 @@ public class UserSignupActivity extends AppCompatActivity {
                             Toast.makeText(UserSignupActivity.this, "Error :" + task.getException().toString(), Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(UserSignupActivity.this, "Registered successfully. Please verify email to login", Toast.LENGTH_SHORT).show();
+                            mAuth.signOut();
                             startActivity(new Intent(UserSignupActivity.this,UserLoginActivity.class));
                             finish();
                         }
