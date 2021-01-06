@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.container_fragment,new MainFragment());
         fragmentTransaction.commit();
 
+        if(getIntent().hasExtra("signedOut")){
+            Snackbar.make(findViewById(R.id.drawer),"Signed out",Snackbar.LENGTH_SHORT).show();
+        }else{
+            // DO SOMETHING
+        }
 
         //MainMenu item click
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -72,31 +78,26 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(GravityCompat.START);
                 switch (item.getItemId()){
                     case R.id.home:
-                        Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.container_fragment,new MainFragment());
                         fragmentTransaction.commit();
                         return true;
                     case R.id.userLogin:
-                        Toast.makeText(MainActivity.this, "User Login", Toast.LENGTH_SHORT).show();
                         Intent intentLogin = new Intent(MainActivity.this,UserLoginActivity.class);
                         startActivity(intentLogin);
                         return true;
                     case R.id.userSignup:
-                        Toast.makeText(MainActivity.this, "Sign up", Toast.LENGTH_SHORT).show();
                         Intent intentSignup = new Intent(MainActivity.this,UserSignupActivity.class);
                         startActivity(intentSignup);
                         return true;
                     case R.id.contactUs:
-                        Toast.makeText(MainActivity.this, "Contact us !", Toast.LENGTH_SHORT).show();
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.container_fragment,new ContactUsFragment());
                         fragmentTransaction.commit();
                         return true;
                     case R.id.aboutUs:
-                        Toast.makeText(MainActivity.this, "About us", Toast.LENGTH_SHORT).show();
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.container_fragment,new AboutUsFragment());

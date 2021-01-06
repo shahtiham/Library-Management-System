@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -130,7 +131,7 @@ public class AdminBookListBookActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     edtaddcpy.setText("");
-                    Toast.makeText(AdminBookListBookActivity.this, "new "+cpy+" copies added", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.adminBookListBookActivity),"New "+cpy+" copies added",Snackbar.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(AdminBookListBookActivity.this, "Error : " + task.getException().toString(), Toast.LENGTH_SHORT).show();
                 }

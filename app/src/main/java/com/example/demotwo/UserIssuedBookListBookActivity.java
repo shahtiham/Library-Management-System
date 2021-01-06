@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -91,7 +92,6 @@ public class UserIssuedBookListBookActivity extends AppCompatActivity {
         String todaydate = formattedDate;
         String toDate = "", toMonth = "", toYear = "";
         for(int i = 0; i <= 1; i++) {
-            if(i == 0 && todaydate.charAt(i) == '0') continue;
             toDate = toDate + todaydate.charAt(i);
         }
         for(int i = 3; i <= 5; i++) toMonth = toMonth + todaydate.charAt(i);
@@ -116,7 +116,7 @@ public class UserIssuedBookListBookActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    Toast.makeText(UserIssuedBookListBookActivity.this, "The book is already requested for return", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.userIssuedBookListBookActivity),"The book is already requested for return",Snackbar.LENGTH_SHORT).show();
                 }
                 else{
                     rqrt.child(receiver_book_id).setValue(mpa)
@@ -127,12 +127,11 @@ public class UserIssuedBookListBookActivity extends AppCompatActivity {
                                         Long n1 = Long.valueOf(thisdate);
                                         Long n2 = Long.valueOf(nxtdate);
                                         if(n1 <= n2){
-                                            Toast.makeText(UserIssuedBookListBookActivity.this, "The book is requested for return", Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(findViewById(R.id.userIssuedBookListBookActivity),"The book is requested for return successfully",Snackbar.LENGTH_SHORT).show();
                                         }
                                         else{
-                                            Toast.makeText(UserIssuedBookListBookActivity.this, "Please pay fine to return the book", Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(findViewById(R.id.userIssuedBookListBookActivity),"Please pay fine to return the book",Snackbar.LENGTH_SHORT).show();
                                         }
-                                        onBackPressed();
                                     }
                                     else{
                                         Toast.makeText(UserIssuedBookListBookActivity.this, "Error : " + task.getException().toString(), Toast.LENGTH_SHORT).show();

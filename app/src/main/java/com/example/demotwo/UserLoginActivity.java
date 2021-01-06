@@ -111,6 +111,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
     private void sendusertoadminhomeactivity() {
         Intent intent = new Intent(UserLoginActivity.this,AdminHomeActivity.class);
+        intent.putExtra("signedIn","true");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -160,7 +161,6 @@ public class UserLoginActivity extends AppCompatActivity {
                                         isad = snapshot.child("isadmin").getValue().toString();
                                         if(isad.equals("true")){
                                             sendusertoadminhomeactivity();
-                                            Toast.makeText(UserLoginActivity.this, "Signed in successfully !", Toast.LENGTH_SHORT).show();
                                         }
                                         else{
                                             //// Check Email verification here (later).
@@ -174,7 +174,6 @@ public class UserLoginActivity extends AppCompatActivity {
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                         if(!snapshot.exists()){
                                                             sendusertousermainhomeactivity();
-                                                            Toast.makeText(UserLoginActivity.this, "Signed in successfully !", Toast.LENGTH_SHORT).show();
                                                         }
                                                         else{
                                                             String email = snapshot.child("email").getValue().toString();
@@ -199,7 +198,6 @@ public class UserLoginActivity extends AppCompatActivity {
                                     else{
                                         if(mAuth.getCurrentUser().isEmailVerified()){
                                             sendusertousermainhomeactivity();
-                                            Toast.makeText(UserLoginActivity.this, "Signed in successfully !", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(UserLoginActivity.this, "Please verify your email to login", Toast.LENGTH_SHORT).show();
                                         }
@@ -241,7 +239,6 @@ public class UserLoginActivity extends AppCompatActivity {
                         else{
                             dt.removeValue();
                             sendusertousermainhomeactivity();
-                            Toast.makeText(UserLoginActivity.this, "Signed in successfully !", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -259,6 +256,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
     private void sendusertousermainhomeactivity() {
         Intent intent = new Intent(UserLoginActivity.this,UserMainHomeActivity.class);
+        intent.putExtra("signedIn","true");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

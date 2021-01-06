@@ -21,6 +21,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -212,7 +213,6 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
                     String todaydate = rqdate;
                     String toDate = "", toMonth = "", toYear = "";
                     for(int i = 0; i <= 1; i++) {
-                        if(i == 0 && todaydate.charAt(i) == '0') continue;
                         toDate = toDate + todaydate.charAt(i);
                     }
                     for(int i = 3; i <= 5; i++) toMonth = toMonth + todaydate.charAt(i);
@@ -245,7 +245,7 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
             public void onClick(View v) {
                 if(ck.isClickable()){
                     if(!ck.isChecked()){
-                        Toast.makeText(getContext(), "Please check if fine paid and mark the checkbox", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Please check if user paid the fine and mark the checkbox", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if(edtam.getText().toString().equals("")){
@@ -291,7 +291,7 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
         btncan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Request canceled", Toast.LENGTH_SHORT).show();
+                Snackbar.make(adusrtrq.findViewById(R.id.adminUserReturnRequestBookFragment),"Return request canceled",Snackbar.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
         });
@@ -316,7 +316,7 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getContext(), "Request approved", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(adusrtrq.findViewById(R.id.adminUserReturnRequestBookFragment),"Return request approved",Snackbar.LENGTH_SHORT).show();
                     DatabaseReference dt = rtrqbkref.child(rtbkid);
                     dt.removeValue();
                     DatabaseReference isdt = issuedbkref.child(rtbkid);
@@ -344,12 +344,14 @@ public class AdminUserReturnRequestBookFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getContext(), "Request approved", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(adusrtrq.findViewById(R.id.adminUserReturnRequestBookFragment),"Return request approved",Snackbar.LENGTH_SHORT).show();
                     DatabaseReference dt = rtrqbkref.child(rtbkid);
                     dt.removeValue();
                     DatabaseReference isdt = issuedbkref.child(rtbkid);
                     isdt.removeValue();
                     getbooks();
+                }else{
+                    Snackbar.make(adusrtrq.findViewById(R.id.adminUserReturnRequestBookFragment),"Error : " + task.getException().toString(),Snackbar.LENGTH_SHORT).show();
                 }
             }
         });

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,7 +89,9 @@ public class UserBookListBookActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if(snapshot.hasChild("bookname")){
-                                    Toast.makeText(UserBookListBookActivity.this, "This book is already issued", Toast.LENGTH_SHORT).show();
+                                    edtissuedcopies.setText("");
+                                    edtissuedcopies.clearFocus();
+                                    Snackbar.make(findViewById(R.id.userBookListBookActivity),"This book is already issued",Snackbar.LENGTH_SHORT).show();
                                 } else {
                                     // Check if the book is in requested issue book list..
                                     issuerequest.child(receiver_book_id)
@@ -96,7 +99,9 @@ public class UserBookListBookActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                     if(snapshot.exists()){
-                                                        Toast.makeText(UserBookListBookActivity.this, "This book is already requested for issue", Toast.LENGTH_SHORT).show();
+                                                        edtissuedcopies.setText("");
+                                                        edtissuedcopies.clearFocus();
+                                                        Snackbar.make(findViewById(R.id.userBookListBookActivity),"This book is already requested for issue",Snackbar.LENGTH_SHORT).show();
                                                     }
                                                     else{
                                                         if(edtissuedcopies.getText().toString().equals("")){
@@ -162,7 +167,7 @@ public class UserBookListBookActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onCancelled(@NonNull DatabaseError error) {
                                                     String dtError = error.getMessage().toString();
-                                                    Toast.makeText(UserBookListBookActivity.this, "Error1 : " + dtError, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(UserBookListBookActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
                                                 }
                                             });
 
@@ -172,7 +177,7 @@ public class UserBookListBookActivity extends AppCompatActivity {
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                                 String dtError = error.getMessage().toString();
-                                Toast.makeText(UserBookListBookActivity.this, "Error2 : " + dtError, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserBookListBookActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -201,15 +206,18 @@ public class UserBookListBookActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(UserBookListBookActivity.this, "Book requested for issue", Toast.LENGTH_SHORT).show();
+                            edtissuedcopies.setText("");
+                            edtissuedcopies.clearFocus();
+                            Snackbar.make(findViewById(R.id.userBookListBookActivity),"Book requested for issue successfully",Snackbar.LENGTH_SHORT).show();
                             bkfieldRef.child("copies").setValue(Long.toString(Lavcopies - Lreqcopies));
                         }
                         else{
-                            Toast.makeText(UserBookListBookActivity.this, "Error3 : " + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                            edtissuedcopies.setText("");
+                            edtissuedcopies.clearFocus();
+                            Toast.makeText(UserBookListBookActivity.this, "Error : " + task.getException().toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-        onBackPressed();
     }
 
     @Override

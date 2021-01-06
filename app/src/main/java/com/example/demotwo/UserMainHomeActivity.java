@@ -72,6 +72,11 @@ public class UserMainHomeActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.container_fragment,new UserBookListFragment());
         fragmentTransaction.commit();
 
+        if(getIntent().hasExtra("signedIn")){
+            Snackbar.make(findViewById(R.id.userhomeDrawer),"Signed in successfully !",Snackbar.LENGTH_SHORT).show();
+        }else{
+            //DO SOMETHING
+        }
 
         //MainMenu item click
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -80,7 +85,6 @@ public class UserMainHomeActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(GravityCompat.START);
                 switch (item.getItemId()){
                     case R.id.btnBooklist:
-                        Toast.makeText(UserMainHomeActivity.this, "Book list", Toast.LENGTH_SHORT).show();
                         getSupportActionBar().setTitle("Books");
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
@@ -88,7 +92,6 @@ public class UserMainHomeActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         return true;
                     case R.id.btnissuedBooklist:
-                        Toast.makeText(UserMainHomeActivity.this, "Issued book list", Toast.LENGTH_SHORT).show();
                         getSupportActionBar().setTitle("Issued Books");
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
@@ -96,7 +99,6 @@ public class UserMainHomeActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         return true;
                     case R.id.btnreturnedBooklist:
-                        Toast.makeText(UserMainHomeActivity.this, "Returned book list", Toast.LENGTH_SHORT).show();
                         getSupportActionBar().setTitle("Returned Books");
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
@@ -104,7 +106,6 @@ public class UserMainHomeActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         return true;
                     case R.id.btnSignout:
-                        Toast.makeText(UserMainHomeActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
                         mAuth.signOut();
                         sendusertomainactivity();
                         return true;
@@ -145,6 +146,7 @@ public class UserMainHomeActivity extends AppCompatActivity {
 
     private void sendusertomainactivity() {
         Intent intent = new Intent(UserMainHomeActivity.this,MainActivity.class);
+        intent.putExtra("signedOut","true");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

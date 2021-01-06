@@ -1,5 +1,6 @@
 package com.example.demotwo;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -25,7 +26,10 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -189,10 +193,9 @@ public class AdminBookListFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    Toast.makeText(getContext(), "The book already exists", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(adminbooklistView.findViewById(R.id.adminBookListFragment),"The book already exists",Snackbar.LENGTH_SHORT).show();
                     return;
                 } else {
-                    Toast.makeText(getContext(), "New book added", Toast.LENGTH_SHORT).show();
                     HashMap<String,String> mp = new HashMap<>();
                     mp.put("bookname",sbk);
                     mp.put("authorname",sauthr);
@@ -200,7 +203,18 @@ public class AdminBookListFragment extends Fragment {
                     mp.put("copies",scpy);
                     String bkid =  adddata.push().getKey();
                     mp.put("bookid",bkid);
-                    adddata.child(bkid).setValue(mp);
+
+                    adddata.child(bkid).setValue(mp)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Snackbar.make(adminbooklistView.findViewById(R.id.adminBookListFragment),"New book added",Snackbar.LENGTH_SHORT).show();
+                                    }else{
+                                        Snackbar.make(adminbooklistView.findViewById(R.id.adminBookListFragment),"Error : " + task.getException().toString(),Snackbar.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             }
 

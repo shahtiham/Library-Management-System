@@ -19,6 +19,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -225,7 +226,7 @@ public class AdminUserIssueRequestBookFragment extends Fragment {
                     Lrq = Long.valueOf(rqcpy);
                     incbk(Long.toString(Lcuravbk+Lrq));
                     rmvdata(rqbkid);
-                    Toast.makeText(getContext(), "Issue request cancelled", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(adusisrqrt.findViewById(R.id.adminUserIssueRequestBookFragment),"Issue request cancelled",Snackbar.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getContext(), "Unknown error", Toast.LENGTH_SHORT).show();
                 }
@@ -266,7 +267,7 @@ public class AdminUserIssueRequestBookFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(getContext(), "Request approved", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(adusisrqrt.findViewById(R.id.adminUserIssueRequestBookFragment),"Issue request approved",Snackbar.LENGTH_SHORT).show();
                             rmvdata(rqbkid);
                         }else{
                             Toast.makeText(getContext(), "Error : " + task.getException().toString(), Toast.LENGTH_SHORT).show();
