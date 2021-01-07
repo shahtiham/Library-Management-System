@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DemoTwo">
+        <activity android:name=".LoginFromActivity"></activity>
         <activity android:name=".AdminUserListUserActivity" />
         <activity android:name=".AdminBookListBookActivity" />
         <activity android:name=".AdminHomeActivity" />

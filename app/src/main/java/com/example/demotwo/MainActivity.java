@@ -122,36 +122,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void check() {
-        if(currentUser != null){
-            // Commented due to addition of admin activity
-            //sendusertousermainhomeactivity();
-
-            // ** Here begins verification.
-            String crid = mAuth.getCurrentUser().getUid();
-            regref.child(crid).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        if(snapshot.child("isadmin").getValue().toString().equals("true")){
-                            sendusertoadminhomeactivity();
-                        }
-                        else{
-                            Toast.makeText(MainActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(MainActivity.this,UserLoginActivity.class));
-                            finish();
-                        }
-                    }
-                    else {
-                        sendusertousermainhomeactivity();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    String dtError = error.getMessage().toString();
-                    Toast.makeText(MainActivity.this, "Error : " + dtError, Toast.LENGTH_SHORT).show();
-                }
-            });
+        if(mAuth.getCurrentUser() != null){
+            Intent intent = new Intent(MainActivity.this,LoginFromActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
