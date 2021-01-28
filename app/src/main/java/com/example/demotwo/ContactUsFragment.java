@@ -4,9 +4,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +26,11 @@ public class ContactUsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View x;
+    //private View y;
+    private TextView Mail1;
+    //private TextView Mail2;
+
 
     public ContactUsFragment() {
         // Required empty public constructor
@@ -59,6 +67,18 @@ public class ContactUsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contact_us, container, false);
+        x= inflater.inflate(R.layout.fragment_contact_us, container, false);
+
+        Mail1 = x.findViewById(R.id.textViewMail);
+
+        TextView feedback = (TextView) x.findViewById(R.id.textViewMail);
+        feedback.setText(Html.fromHtml("<a href=\"mailto:sultanularefinpavel@gmail.com\">sultanularefinpavel@gmail.com</a>"));
+        feedback.setMovementMethod(LinkMovementMethod.getInstance());
+
+        TextView feedback2= (TextView) x.findViewById(R.id.textViewMail2);
+        feedback2.setText(Html.fromHtml("<a href=\"mailto:tihamshah25599@gmail.com\">tihamshah25599@gmail.com</a>"));
+        feedback2.setMovementMethod(LinkMovementMethod.getInstance());
+
+        return x;
     }
 }

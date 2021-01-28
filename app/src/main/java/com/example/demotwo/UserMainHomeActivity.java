@@ -105,6 +105,20 @@ public class UserMainHomeActivity extends AppCompatActivity {
                         fragmentTransaction.replace(R.id.container_fragment,new UserReturnedBookListFragment());
                         fragmentTransaction.commit();
                         return true;
+                    case R.id.usbtncontactUs:
+                        getSupportActionBar().setTitle("Contact Us");
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.container_fragment,new ContactUsFragment());
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.usbtnaboutUs:
+                        getSupportActionBar().setTitle("About Us");
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.container_fragment,new AboutUsFragment());
+                        fragmentTransaction.commit();
+                        return true;
                     case R.id.btnSignout:
                         mAuth.signOut();
                         sendusertomainactivity();

@@ -6,21 +6,30 @@
             android:id="@+id/btnBooklist"
             android:icon="@drawable/ic_books"
             android:title="Books"
-            app:showAsAction="never"></item>
+            app:showAsAction="never"> </item>
         <item
             android:id="@+id/btnissuedBooklist"
             android:icon="@drawable/ic_issuedbooks"
             android:title="Issued books"
-            app:showAsAction="never"></item>
+            app:showAsAction="never"> </item>
         <item
             android:id="@+id/btnreturnedBooklist"
             android:icon="@drawable/ic_issuedbooks"
             android:title="Returned books"
-            app:showAsAction="never"></item>
+            app:showAsAction="never"> </item>
+        <item
+            android:id="@+id/usbtncontactUs"
+            android:icon="@drawable/ic_contactus"
+            android:title="contact us" />
+        <item
+            android:id="@+id/usbtnaboutUs"
+            android:icon="@drawable/ic_aboutus"
+            android:title="about us" />
     </group>
+
     <item
         android:id="@+id/btnSignout"
         android:icon="@drawable/ic_signout"
         android:title="@string/sign_out"
-        app:showAsAction="never"></item>
+        app:showAsAction="never"> </item>
 </menu>
